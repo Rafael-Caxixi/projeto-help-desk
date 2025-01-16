@@ -1,8 +1,8 @@
-package com.rafael.helpdesk.domain;
+package com.rafael.helpdesk.domain.cliente;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record DadosCadastroCliente(
+public record DtoCadastroCliente(
         @NotBlank
         String nome,
         @NotBlank
