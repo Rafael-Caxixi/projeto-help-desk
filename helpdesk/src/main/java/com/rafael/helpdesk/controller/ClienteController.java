@@ -1,5 +1,6 @@
 package com.rafael.helpdesk.controller;
 
+import com.rafael.helpdesk.domain.chamado.DtoCadastroChamado;
 import com.rafael.helpdesk.domain.cliente.DtoAtualizacaoCliente;
 import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
 import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
@@ -18,9 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
-
-    @Autowired
-    ClienteRepository repository;
 
     @Autowired
     ClienteService service;
@@ -49,5 +47,17 @@ public class ClienteController {
     public ResponseEntity deletar(@PathVariable Long id){
         return service.deletar(id);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalharPorId(@PathVariable Long id){
+        return service.detalharPorId(id);
+    }
+
+    @PostMapping("/suporte")
+    @Transactional
+    public ResponseEntity abrirChamado(@RequestBody @Valid DtoCadastroChamado dto, UriComponentsBuilder uriBuilder){
+        return service.abrirChamado(dto, uriBuilder);
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.rafael.helpdesk.controller;
 
+import com.rafael.helpdesk.domain.chamado.DtoCapturaChamado;
 import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
 import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
 import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
@@ -46,6 +47,16 @@ public class ConsultorController {
         return service.deletar(id);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity detalharPorId(@PathVariable Long id){
+        return service.detalharPorId(id);
+    }
+
+    @PostMapping("/suporte")
+    @Transactional
+    public ResponseEntity capturarChamado(@RequestBody @Valid DtoCapturaChamado dto){
+        return service.capturarChamado(dto);
+    }
 
 
 }
