@@ -1,10 +1,11 @@
 package com.rafael.helpdesk.controller;
 
-import com.rafael.helpdesk.domain.cliente.DtoAtualizacaoCliente;
 import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
 import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
-import com.rafael.helpdesk.repository.ClienteRepository;
-import com.rafael.helpdesk.service.ClienteService;
+import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
+import com.rafael.helpdesk.domain.consultor.DtoCadastroConsultor;
+import com.rafael.helpdesk.domain.consultor.DtoListagemConsultor;
+import com.rafael.helpdesk.service.ConsultorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +17,26 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/clientes")
-public class ClienteController {
+@RequestMapping("/consultores")
+public class ConsultorController {
 
     @Autowired
-    ClienteRepository repository;
+    ConsultorService service;
 
-    @Autowired
-    ClienteService service;
-
-    @PostMapping()
-    @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DtoCadastroCliente dto, UriComponentsBuilder uriBuilder){
-        return service.cadastrar(dto, uriBuilder);
+    @PostMapping
+    public ResponseEntity cadastrar(@RequestBody @Valid DtoCadastroConsultor dto, UriComponentsBuilder uriBuilder){
+        return service.cadastrar(dto,uriBuilder);
     }
 
     @GetMapping
-    public ResponseEntity<Page<DtoListagemCliente>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+    public ResponseEntity<Page<DtoListagemConsultor>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
         var page = service.listar(paginacao);
         return ResponseEntity.ok(page);
     }
 
-
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DtoAtualizacaoCliente dto) {
+    public ResponseEntity atualizar(@RequestBody @Valid DtoAtualizacaoConsultor dto){
         return service.atualizar(dto);
     }
 
@@ -49,5 +45,7 @@ public class ClienteController {
     public ResponseEntity deletar(@PathVariable Long id){
         return service.deletar(id);
     }
+
+
 
 }

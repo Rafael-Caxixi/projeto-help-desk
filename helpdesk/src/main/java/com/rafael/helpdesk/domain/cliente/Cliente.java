@@ -1,4 +1,4 @@
-package com.rafael.helpdesk.domain;
+package com.rafael.helpdesk.domain.cliente;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class Cliente {
     private String telefone;
 
 
-    public Cliente(DadosCadastroCliente dados) {
+    public Cliente(DtoCadastroCliente dados) {
         this.nome = dados.nome();
         this.email = dados.email();
         this.senha = dados.senha();
@@ -37,4 +37,18 @@ public class Cliente {
         this.telefone = dados.telefone();
     }
 
+    public void atualizarInformacoes(DtoAtualizacaoCliente dto) {
+        if(dto.nome() != null){
+            this.nome = dto.nome();
+        }
+        if(dto.email() != null){
+            this.email = dto.email();
+        }
+        if(dto.cnpj() != null){
+            this.cnpj = dto.cnpj();
+        }
+        if(dto.telefone() != null){
+            this.telefone = dto.telefone();
+        }
+    }
 }
