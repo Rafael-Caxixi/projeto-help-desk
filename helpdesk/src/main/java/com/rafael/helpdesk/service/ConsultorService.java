@@ -2,8 +2,8 @@ package com.rafael.helpdesk.service;
 
 import com.rafael.helpdesk.domain.chamado.Chamado;
 import com.rafael.helpdesk.domain.chamado.DtoCapturaChamado;
-import com.rafael.helpdesk.domain.cliente.Cliente;
-import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamados;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosAberto;
 import com.rafael.helpdesk.domain.consultor.Consultor;
 import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoCadastroConsultor;
@@ -11,7 +11,6 @@ import com.rafael.helpdesk.domain.consultor.DtoListagemConsultor;
 import com.rafael.helpdesk.repository.ChamadoRepository;
 import com.rafael.helpdesk.repository.ConsultorRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +75,9 @@ public class ConsultorService {
         chamadoRepository.save(chamado);
         return ResponseEntity.ok().body("Chamado capturado com id: " + chamado.getId());
 
+    }
+
+    public Page<DtoListagemChamadosAberto> listarChamadosAberto(Pageable paginacao) {
+        return chamadoRepository.findAllByAbertoTrue(paginacao).map(chamado -> new DtoListagemChamadosAberto(chamado));
     }
 }

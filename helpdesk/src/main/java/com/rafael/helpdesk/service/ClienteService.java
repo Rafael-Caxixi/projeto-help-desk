@@ -2,7 +2,8 @@ package com.rafael.helpdesk.service;
 
 import com.rafael.helpdesk.domain.chamado.Chamado;
 import com.rafael.helpdesk.domain.chamado.DtoCadastroChamado;
-import com.rafael.helpdesk.domain.chamado.DtoListagemChamado;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamados;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosPorCliente;
 import com.rafael.helpdesk.domain.cliente.Cliente;
 import com.rafael.helpdesk.domain.cliente.DtoAtualizacaoCliente;
 import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -73,6 +72,11 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(chamado.getIdCliente()).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
         var uri = uriBuilder.path("/clientes/suporte/{id}").buildAndExpand(chamado.getId()).toUri();
-        return ResponseEntity.created(uri).body(new DtoListagemChamado(chamado, cliente));
+        return ResponseEntity.created(uri).body(new DtoListagemChamados(chamado, cliente));
+    }
+
+    public Page<DtoListagemChamadosPorCliente> listarMeusChamados(Long id, Pageable paginacao) {
+        return chamadoRepository.findAllByIdCliente(id, paginacao).map(DtoListagemChamadosPorCliente::new);
+
     }
 }
