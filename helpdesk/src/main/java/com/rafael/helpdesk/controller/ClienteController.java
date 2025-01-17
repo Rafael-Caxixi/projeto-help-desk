@@ -1,10 +1,10 @@
 package com.rafael.helpdesk.controller;
 
 import com.rafael.helpdesk.domain.chamado.DtoCadastroChamado;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosPorCliente;
 import com.rafael.helpdesk.domain.cliente.DtoAtualizacaoCliente;
 import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
 import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
-import com.rafael.helpdesk.repository.ClienteRepository;
 import com.rafael.helpdesk.service.ClienteService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -57,6 +57,11 @@ public class ClienteController {
     @Transactional
     public ResponseEntity abrirChamado(@RequestBody @Valid DtoCadastroChamado dto, UriComponentsBuilder uriBuilder){
         return service.abrirChamado(dto, uriBuilder);
+    }
+
+    @GetMapping("/chamados/{id}")
+    public Page<DtoListagemChamadosPorCliente> listarMeusChamados(@PathVariable Long id, @PageableDefault(size = 10, sort = {"id"}) Pageable paginacao){
+        return service.listarMeusChamados(id, paginacao);
     }
 
 

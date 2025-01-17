@@ -1,8 +1,7 @@
 package com.rafael.helpdesk.controller;
 
 import com.rafael.helpdesk.domain.chamado.DtoCapturaChamado;
-import com.rafael.helpdesk.domain.cliente.DtoCadastroCliente;
-import com.rafael.helpdesk.domain.cliente.DtoListagemCliente;
+import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosAberto;
 import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoCadastroConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoListagemConsultor;
@@ -56,6 +55,11 @@ public class ConsultorController {
     @Transactional
     public ResponseEntity capturarChamado(@RequestBody @Valid DtoCapturaChamado dto){
         return service.capturarChamado(dto);
+    }
+
+    @GetMapping("/chamados")
+    public Page<DtoListagemChamadosAberto> listarChamadosAberto(@PageableDefault(size = 10, sort = {"id"}) Pageable paginacao){
+        return service.listarChamadosAberto(paginacao);
     }
 
 
