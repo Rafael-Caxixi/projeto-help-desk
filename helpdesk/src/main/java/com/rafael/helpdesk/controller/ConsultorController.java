@@ -1,6 +1,7 @@
 package com.rafael.helpdesk.controller;
 
 import com.rafael.helpdesk.domain.chamado.DtoCapturaChamado;
+import com.rafael.helpdesk.domain.chamado.DtoEnvioEmail;
 import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosAberto;
 import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoCadastroConsultor;
@@ -62,5 +63,9 @@ public class ConsultorController {
         return service.listarChamadosAberto(paginacao);
     }
 
+    @PostMapping("/chamados/enviar-email")
+    public ResponseEntity enviarEmail(@RequestBody DtoEnvioEmail dto){    // Conteúdo do e-mail
+        return service.enviarEmail(dto);
+    }
 
 }

@@ -9,4 +9,6 @@ public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
     Page<Chamado> findAllByIdCliente(Long id, Pageable paginacao);
 
     Page<Chamado> findAllByAbertoTrue(Pageable paginacao);
+
+    Chamado findAllByIdCliente(Long id);
 }

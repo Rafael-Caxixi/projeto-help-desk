@@ -1,23 +1,29 @@
 package com.rafael.helpdesk.service;
 
-import com.rafael.helpdesk.domain.chamado.Chamado;
-import com.rafael.helpdesk.domain.chamado.DtoCapturaChamado;
-import com.rafael.helpdesk.domain.chamado.DtoListagemChamados;
-import com.rafael.helpdesk.domain.chamado.DtoListagemChamadosAberto;
+import com.rafael.helpdesk.domain.chamado.*;
+import com.rafael.helpdesk.domain.cliente.Cliente;
 import com.rafael.helpdesk.domain.consultor.Consultor;
 import com.rafael.helpdesk.domain.consultor.DtoAtualizacaoConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoCadastroConsultor;
 import com.rafael.helpdesk.domain.consultor.DtoListagemConsultor;
 import com.rafael.helpdesk.repository.ChamadoRepository;
+import com.rafael.helpdesk.repository.ClienteRepository;
 import com.rafael.helpdesk.repository.ConsultorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Optional;
+import java.util.Properties;
 
 @Service
 public class ConsultorService {
@@ -27,6 +33,12 @@ public class ConsultorService {
     
     @Autowired
     ChamadoRepository chamadoRepository;
+
+    @Autowired
+    ClienteRepository clienteRepository;
+
+    @Autowired
+    EnvioEmailService envioEmailService;
 
     public ResponseEntity cadastrar(DtoCadastroConsultor dto, UriComponentsBuilder uriBuilder) {
         if(consultorRepository.existsByCpf(dto.cpf())){
@@ -79,5 +91,17 @@ public class ConsultorService {
 
     public Page<DtoListagemChamadosAberto> listarChamadosAberto(Pageable paginacao) {
         return chamadoRepository.findAllByAbertoTrue(paginacao).map(chamado -> new DtoListagemChamadosAberto(chamado));
+    }
+
+    public ResponseEntity enviarEmail(DtoEnvioEmail dto) {
+        Chamado chamado = chamadoRepository.findById(dto.idChamado()).orElseThrow(() -> new EntityNotFoundException("Chamado não encontrado"));
+        Consultor consultor = consultorRepository.findById(dto.idConsultor()).orElseThrow(() -> new EntityNotFoundException("Consultor não encontrado"));
+        Cliente cliente = clienteRepository.findById(chamado.getIdCliente()).orElseThrow(() -> new EntityNotFoundException("Email do cliente não encontrado"));
+
+        if(chamado.getIdConsultor() != consultor.getId()){
+            return ResponseEntity.badRequest().body("O chamado não pertence ao consultor informado");
+        }
+        envioEmailService.enviarEmailTexto(cliente.getEmail(), "Chamado " + chamado.getId(), "Seu chamado " + chamado.getId() + " foi respondido");
+        return ResponseEntity.ok().body("Email enviado com sucesso");
     }
 }
