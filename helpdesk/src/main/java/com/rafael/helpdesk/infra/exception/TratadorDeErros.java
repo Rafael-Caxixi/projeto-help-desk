@@ -1,4 +1,4 @@
-package com.rafael.helpdesk.exception;
+package com.rafael.helpdesk.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

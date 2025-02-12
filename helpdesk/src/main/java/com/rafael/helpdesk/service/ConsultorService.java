@@ -101,7 +101,7 @@ public class ConsultorService {
         if(chamado.getIdConsultor() != consultor.getId()){
             return ResponseEntity.badRequest().body("O chamado não pertence ao consultor informado");
         }
-        envioEmailService.enviarEmailTexto(cliente.getEmail(), "Chamado " + chamado.getId(), "Seu chamado " + chamado.getId() + " foi respondido");
+        envioEmailService.enviarEmailTexto(cliente.getEmail(), "Chamado " + chamado.getId(), dto.resposta());
         return ResponseEntity.ok().body("Email enviado com sucesso");
     }
 }

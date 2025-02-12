@@ -19,14 +19,14 @@ public class EnvioEmailService {
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public String enviarEmailTexto(String destinatario, String aassunto, String mensagem) {
+    public String enviarEmailTexto(String destinatario, String assunto, String mensagem) {
 
         try{
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
             simpleMailMessage.setFrom(remetente);
             simpleMailMessage.setTo(destinatario);
-            simpleMailMessage.setSubject(aassunto);
+            simpleMailMessage.setSubject(assunto);
             simpleMailMessage.setText(mensagem);
             javaMailSender.send(simpleMailMessage);
             return "Email enviado";
